@@ -2,8 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import { AddToCart, BuyNow, Link, TextField, useStorefront, type GiftRecipient, type ProductPage } from '@dripfunnel/storefront-core/theme'
-import { shop } from '../styles/shop'
-import { product as styles } from '../styles/product'
+import shop from '../../styles/shop.module.css'
+import styles from '../../styles/product.module.css'
 import { WishlistHeart } from './WishlistHeart'
 
 const emailLike = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -79,7 +79,18 @@ export const BuyButtons = ({ page }: { page: ProductPage }) => {
             setAddedId(version?.id ?? null)
           }}
         >
-          {isGift ? t('shop.product.gift.add') : t('shop.product.add')}
+          {({ busy }) =>
+            busy ? (
+              <>
+                <span className={shop.spinner} aria-hidden="true" />
+                {t('shop.product.adding')}
+              </>
+            ) : isGift ? (
+              t('shop.product.gift.add')
+            ) : (
+              t('shop.product.add')
+            )
+          }
         </AddToCart>
       )}
       {isGift ? null : (

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Checkbox, PriceRange, Select, useLoadOnScroll, useStorefront, type Listing, type SortKey } from '@dripfunnel/storefront-core/theme'
-import { shop as styles } from '../styles/shop'
+import styles from '../../styles/shop.module.css'
 
 /** The filter values and the price range, a sidebar on wide screens and a panel the Filters button opens on narrow ones. */
 export const FilterPanel = ({ listing }: { listing: Listing }) => {

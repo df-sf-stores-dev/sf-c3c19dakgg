@@ -1,4 +1,4 @@
-import { Breadcrumbs, LegalNotices, Link, Price, RichText, SizeChart, useProduct, useStorefront } from '@dripfunnel/storefront-core/theme'
+import { Breadcrumbs, LegalNotices, Link, Price, ProductStory, RichText, SizeChart, useProduct, useStorefront } from '@dripfunnel/storefront-core/theme'
 import { BuyButtons } from '../components/interactive/BuyButtons'
 import { Gallery } from '../components/interactive/Gallery'
 import { Options } from '../components/interactive/Options'
@@ -6,8 +6,9 @@ import { Retry } from '../components/interactive/Retry'
 import { Layout } from '../components/Layout'
 import { Notice } from '../components/Notice'
 import { ProductGrid } from '../components/ProductCard'
-import { shop } from '../components/styles/shop'
-import { product as styles } from '../components/styles/product'
+import shop from '../styles/shop.module.css'
+import story from '../styles/aplus.module.css'
+import styles from '../styles/product.module.css'
 
 export const ProductPage = () => {
   const { store, locale, t } = useStorefront()
@@ -58,8 +59,7 @@ export const ProductPage = () => {
             <h1 className={styles.title}>{product.name}</h1>
             {page.price ? (
               <p className={styles.price}>
-                {page.from ? <span className={styles.from}>{t('shop.card.from')}</span> : null}
-                <Price money={page.price} compareAt={page.compareAt} includesTax={store.pricesIncludeTax} locale={locale} t={t} className={styles.priceTag} />
+                <Price money={page.price} compareAt={page.compareAt} to={page.maxPrice} includesTax={store.pricesIncludeTax} locale={locale} t={t} className={styles.priceTag} />
               </p>
             ) : null}
             <Options page={page} />
@@ -127,6 +127,7 @@ export const ProductPage = () => {
             </div>
           </div>
         </div>
+        <ProductStory product={product} versionId={page.version?.id ?? null} className={story.aplus} classes={story} />
         {product.related.length ? (
           <section className={styles.related}>
             <h2 className={shop.heading}>{t('shop.product.related')}</h2>

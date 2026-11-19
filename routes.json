@@ -26,6 +26,7 @@
   },
   "custom": {
     "/about": "AboutPage",
-    "/contact": "ContactPage"
+    "/contact": "ContactPage",
+    "/help": "FaqPage"
   }
 }

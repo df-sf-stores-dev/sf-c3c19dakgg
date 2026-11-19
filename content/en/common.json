@@ -3,12 +3,14 @@
     "label": "Main",
     "menu": "Menu",
     "submenu": "Submenu: {item}",
-    "shop": "Shop",
+    "home": "Home",
+    "shopAll": "Shop all",
     "about": "About",
     "contact": "Contact"
   },
   "tools": {
     "search": "Search",
+    "searchPrompt": "Search products…",
     "account": "Account",
     "wishlist": "Wishlist",
     "wishlistCount": "Wishlist, {count, plural, one {# item} other {# items}}",
@@ -16,7 +18,7 @@
     "cartCount": "Cart, {count, plural, one {# item} other {# items}}"
   },
   "footer": {
-    "note": "Questions about a product? Write to us.",
+    "note": "Thank you for shopping with us.",
     "shop": "Shop",
     "all": "Shop all",
     "help": "Help",
@@ -25,6 +27,10 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "legal": "Legal",
-    "notice": "Legal notice"
+    "touch": "Get in touch",
+    "orders": "My orders",
+    "faq": "FAQs",
+    "whatsapp": "Chat with us on WhatsApp",
+    "rights": "© 2026 {store}. All rights reserved."
   }
 }

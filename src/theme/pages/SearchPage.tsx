@@ -2,7 +2,7 @@ import { Link, SearchField, useCollections, useSearch, useStorefront } from '@dr
 import { Layout } from '../components/Layout'
 import { ListingResults } from '../components/ListingResults'
 import { Notice } from '../components/Notice'
-import { shop as styles } from '../components/styles/shop'
+import styles from '../styles/shop.module.css'
 
 export const SearchPage = () => {
   const { t } = useStorefront()
@@ -16,7 +16,7 @@ export const SearchPage = () => {
           <h1 className={styles.title}>{search.query ? t('shop.search.results', { query: search.query }) : t('shop.search.title')}</h1>
           {search.query ? null : <p className={styles.lead}>{t('shop.search.lead')}</p>}
         </header>
-        <SearchField label={t('shop.search.label')} placeholder={t('shop.search.placeholder')} button={t('shop.search.button')} value={search.query} onSearch={search.setQuery} suggest={4} className={styles.search} />
+        <SearchField label={t('shop.search.label')} placeholder={t('shop.search.placeholder')} button={t('shop.search.button')} value={search.query} onSearch={search.setQuery} className={styles.search} />
         {none ? (
           <Notice title={t('shop.search.none', { query: search.query })} lead={t('shop.search.noneLead')}>
             {collections.map((c) => (

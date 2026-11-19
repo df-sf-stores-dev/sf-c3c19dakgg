@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { clsx } from 'clsx'
+import { cx } from '../cx'
 import { Checkbox, Form, Link, PhoneField, SubmitButton, TextField, useSignIn, useStorefront, type FieldProblem, type SignInChannel } from '@dripfunnel/storefront-core/theme'
-import { shop } from '../styles/shop'
-import { account as styles } from '../styles/account'
+import shop from '../../styles/shop.module.css'
+import styles from '../../styles/account.module.css'
 
 type Purpose = 'signIn' | 'register' | 'reset'
 
@@ -59,19 +59,32 @@ export const SignInView = ({ purpose }: { purpose: Purpose }) => {
     )
   }
 
-  const byPhone = purpose === 'signIn' && (channel === 'phone' || !s.ways.email)
-  const tabs = purpose === 'signIn' && s.ways.email && s.ways.phone
+  // Sign-in and create account offer the ways the store turned on; a code to a number makes the account, with no password.
+  const byPhone = purpose !== 'reset' && (channel === 'phone' || !s.ways.email)
+  const tabs = purpose !== 'reset' && s.ways.email && s.ways.phone
   const sentTo = s.sent?.to ?? ''
+
+  if (purpose === 'reset' && !s.ways.email) {
+    return (
+      <section className={styles.auth}>
+        <h1 className={styles.title}>{title}</h1>
+        <p className={styles.lead}>{t('shop.account.noPassword')}</p>
+        <Link href="/sign-in/" className={shop.primary}>
+          {t('pages.signIn.title')}
+        </Link>
+      </section>
+    )
+  }
   return (
     <section className={styles.auth}>
       <h1 className={styles.title}>{title}</h1>
       {purpose === 'register' ? <p className={styles.lead}>{t('pages.register.lead')}</p> : purpose === 'reset' && !s.sent ? <p className={styles.lead}>{t('shop.account.resetLead')}</p> : null}
       {tabs && !s.sent ? (
         <div className={styles.tabs} role="group" aria-label={t('shop.account.how')}>
-          <button type="button" className={clsx(styles.tabBase, !(channel === 'email') && 'bg-transparent text-ink-soft', channel === 'email' && styles.tabOn)} aria-pressed={channel === 'email'} onClick={() => setChannel('email')}>
+          <button type="button" className={cx(styles.tab, channel === 'email' && styles.tabOn)} aria-pressed={channel === 'email'} onClick={() => setChannel('email')}>
             {t('shop.checkout.email')}
           </button>
-          <button type="button" className={clsx(styles.tabBase, !(channel === 'phone') && 'bg-transparent text-ink-soft', channel === 'phone' && styles.tabOn)} aria-pressed={channel === 'phone'} onClick={() => setChannel('phone')}>
+          <button type="button" className={cx(styles.tab, channel === 'phone' && styles.tabOn)} aria-pressed={channel === 'phone'} onClick={() => setChannel('phone')}>
             {t('shop.checkout.phone')}
           </button>
         </div>
@@ -85,7 +98,7 @@ export const SignInView = ({ purpose }: { purpose: Purpose }) => {
         <Form
           className={styles.form}
           onSubmit={() =>
-            void s.verify({ code, remember, ...(purpose === 'register' ? { name, password } : purpose === 'reset' ? { password } : {}) }).then(setErrors)
+            void s.verify({ code, remember, ...(purpose === 'register' ? (s.sent?.channel === 'phone' ? { name } : { name, password }) : purpose === 'reset' ? { password } : {}) }).then(setErrors)
           }
         >
           <p className={styles.note}>{t('shop.account.codeSent', { to: sentTo })}</p>
@@ -121,7 +134,7 @@ export const SignInView = ({ purpose }: { purpose: Purpose }) => {
             if (purpose === 'register') {
               const own: typeof errors = {}
               if (!name.trim()) own.name = 'required'
-              if (password.length < 10) own.password = password ? 'invalid' : 'required'
+              if (!byPhone && password.length < 10) own.password = password ? 'invalid' : 'required'
               if (Object.keys(own).length > 0) return setErrors(own)
             }
             void s.sendCode({ channel: byPhone ? 'phone' : 'email', to: byPhone ? phone : email }).then(setErrors)
@@ -133,7 +146,7 @@ export const SignInView = ({ purpose }: { purpose: Purpose }) => {
           ) : (
             <TextField label={t('shop.checkout.email')} type="email" autoComplete="email" value={email} onChange={setEmail} error={problem(errors.to)} className={styles.field} />
           )}
-          {purpose === 'register' ? <TextField label={t('shop.account.password')} type="password" autoComplete="new-password" value={password} onChange={setPassword} hint={t('shop.account.passwordRule')} error={problem(errors.password, 'password')} className={styles.field} /> : null}
+          {purpose === 'register' && !byPhone ? <TextField label={t('shop.account.password')} type="password" autoComplete="new-password" value={password} onChange={setPassword} hint={t('shop.account.passwordRule')} error={problem(errors.password, 'password')} className={styles.field} /> : null}
           {purpose === 'signIn' ? (
             <Checkbox checked={remember} onChange={setRemember} className={styles.check}>
               {t('shop.account.remember')}

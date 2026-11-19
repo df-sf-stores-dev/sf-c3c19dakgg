@@ -3,7 +3,7 @@ import { Layout } from '../components/Layout'
 import { ListingResults } from '../components/ListingResults'
 import { Notice } from '../components/Notice'
 import { Retry } from '../components/interactive/Retry'
-import { shop as styles } from '../components/styles/shop'
+import styles from '../styles/shop.module.css'
 
 export const CollectionPage = () => {
   const { t } = useStorefront()

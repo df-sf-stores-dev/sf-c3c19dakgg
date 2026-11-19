@@ -1,7 +1,7 @@
 import { Link, useStorefront } from '@dripfunnel/storefront-core/theme'
 import { Layout } from '../../components/Layout'
 import { PageIntro } from '../../components/PageIntro'
-import { page as styles } from '../../components/styles/page'
+import styles from '../../styles/page.module.css'
 
 export const ResetPasswordPage = () => {
   const { t } = useStorefront()

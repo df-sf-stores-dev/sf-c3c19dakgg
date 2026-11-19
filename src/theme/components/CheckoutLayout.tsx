@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { ConsentBanner, ConsentSettingsButton, Link, PoweredBy, PreviewBanner, StoreLogo, useStorefront } from '@dripfunnel/storefront-core/theme'
-import { layout } from './styles/layout'
-import { checkout as styles } from './styles/checkout'
+import layout from '../styles/layout.module.css'
+import styles from '../styles/checkout.module.css'
 
 /** Checkout's own frame (D1): the shop's logo or name, "Secure checkout" and the way back to the cart, without the menu. */
 export const CheckoutLayout = ({ children }: { children: ReactNode }) => {
@@ -28,8 +28,8 @@ export const CheckoutLayout = ({ children }: { children: ReactNode }) => {
       </header>
       <main className={layout.main}>{children}</main>
       <footer className={styles.footer}>
-        <ConsentSettingsButton t={t} className={layout.cookies} />
-        <PoweredBy brand={poweredBy} t={t} className={layout.powered} />
+        <ConsentSettingsButton t={t} className={styles.cookies} />
+        <PoweredBy brand={poweredBy} t={t} className={styles.powered} />
       </footer>
       <ConsentBanner t={t} className={layout.consent} />
     </div>

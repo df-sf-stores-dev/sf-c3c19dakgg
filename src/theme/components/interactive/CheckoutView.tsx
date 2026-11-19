@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { clsx } from 'clsx'
-import { AddressFields, Checkbox, Choices, CodeField, Form, Link, OrderSummary, PaymentElement, PhoneField, PlaceOrder, Price, SubmitButton, TextField, addressDraft, useAccount, useCart, useCheckout, useStorefront, type AddressField, type CheckoutStepId, type DeliveryOption, type FieldProblem } from '@dripfunnel/storefront-core/theme'
+import { cx } from '../cx'
+import { AddressFields, AgeConfirmation, Checkbox, Choices, CodeField, Form, Link, OrderSummary, PaymentElement, PhoneField, PlaceOrder, Price, SubmitButton, TextField, addressDraft, useAccount, useCart, useCheckout, useStorefront, type AddressField, type CheckoutStepId, type DeliveryOption, type FieldProblem } from '@dripfunnel/storefront-core/theme'
 import { Notice } from '../Notice'
 import { PaymentMethod } from '../PaymentMethod'
 import { Retry } from './Retry'
-import { shop } from '../styles/shop'
-import { checkout as styles } from '../styles/checkout'
-import { account as accountStyles } from '../styles/account'
+import shop from '../../styles/shop.module.css'
+import accountStyles from '../../styles/account.module.css'
+import styles from '../../styles/checkout.module.css'
 
 /** The checkout's body: core's steps as cards, each open, done with its Change, or still to come, beside the sealed summary (D1). */
 export const CheckoutView = () => {
@@ -85,7 +85,9 @@ export const CheckoutView = () => {
           ? t('shop.checkout.refusals.notReady')
           : code === 'OFFER_CHANGED' || code === 'CART_CHANGED'
             ? t('shop.checkout.refusals.changed')
-            : t('shop.checkout.refusals.other')
+            : code === 'AGE_CONFIRMATION_REQUIRED'
+              ? t('shop.checkout.refusals.age')
+              : t('shop.checkout.refusals.other')
   const problem = (p: string | undefined) => (p === 'required' ? t('shop.checkout.required') : p === 'invalid' ? t('shop.checkout.invalid') : null)
 
   const body = (id: CheckoutStepId) => {
@@ -138,7 +140,7 @@ export const CheckoutView = () => {
           value={cart.shippingOption}
           className={styles.choices}
           optionClassName={styles.choice}
-          chosenClassName={clsx(styles.choiceBase, styles.chosen)}
+          chosenClassName={cx(styles.choice, styles.chosen)}
           onChange={(o) => void c.chooseDelivery(o)}
           options={cart.shippingOptions.map((o) => ({
             value: o.id,
@@ -165,7 +167,7 @@ export const CheckoutView = () => {
               value={c.chosen}
               className={styles.choices}
               optionClassName={styles.choice}
-              chosenClassName={clsx(styles.choiceBase, styles.chosen)}
+              chosenClassName={cx(styles.choice, styles.chosen)}
               onChange={c.choosePayment}
               options={c.payments.map((p) => ({
                 value: p.provider,
@@ -208,7 +210,8 @@ export const CheckoutView = () => {
         </dl>
         <p className={styles.note}>{t('shop.checkout.agree')}</p>
         <PaymentElement t={t} className={styles.payment} />
-        <PlaceOrder checkout={c} className={clsx(shop.primaryBase, styles.pay)} again={t('shop.checkout.payAgain')}>
+        <AgeConfirmation needed={c.needsAgeConfirmation} checked={c.ageConfirmed} onChange={c.confirmAge} t={t} className={styles.age} />
+        <PlaceOrder checkout={c} className={cx(shop.primary, styles.pay)} again={t('shop.checkout.payAgain')}>
           {t('shop.checkout.place')}
         </PlaceOrder>
         {c.phase.kind === 'failed' && c.phase.orderId === null ? <p className={styles.error} role="alert">{refusal(c.phase.code)}</p> : null}
@@ -227,9 +230,9 @@ export const CheckoutView = () => {
       <div className={styles.layout}>
         <ol className={styles.steps}>
           {c.steps.map((s) => (
-            <li key={s.id} className={clsx(styles.stepBase, !(s.state === 'open') && 'border-line', s.state === 'open' && styles.open)}>
+            <li key={s.id} className={cx(styles.step, s.state === 'open' && styles.open)}>
               <div className={styles.stepHead}>
-                <span className={clsx(styles.numberBase, !(s.state === 'done') && 'inline-flex w-6.5 h-6.5 shrink-0 items-center justify-center rounded-full bg-soft text-ink text-[13px] font-bold [&::before]:[content:counter(step)]', s.state === 'done' && styles.numberDone)} aria-hidden="true" />
+                <span className={cx(styles.number, s.state === 'done' && styles.numberDone)} aria-hidden="true" />
                 <h2 className={styles.stepTitle}>{stepTitle(s.id)}</h2>
                 {s.state === 'done' && s.id !== 'review' ? (
                   <button type="button" className={styles.change} aria-label={t('shop.checkout.changeStep', { step: stepTitle(s.id) })} onClick={() => c.edit(s.id)}>

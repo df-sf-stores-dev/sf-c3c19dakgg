@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { clsx } from 'clsx'
+import { cx } from '../cx'
 import { CodeField, EditAnswers, Image, LineAnswers, Link, OrderSummary, Price, useCart, useStorefront, type CartLine } from '@dripfunnel/storefront-core/theme'
 import { Notice } from '../Notice'
 import { Retry } from './Retry'
-import { shop } from '../styles/shop'
-import { cart as styles } from '../styles/cart'
+import shop from '../../styles/shop.module.css'
+import styles from '../../styles/cart.module.css'
 
 const Minus = () => (
   <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -104,7 +104,7 @@ export const CartView = () => {
       <div className={styles.cart}>
         <ul className={styles.lines}>
           {cart.lines.map((line) => (
-            <li key={line.versionId} className={clsx(styles.line, line.pending && styles.pending)}>
+            <li key={line.versionId} className={cx(styles.line, line.pending && styles.pending)}>
               {line.photo ? <Image image={line.photo} alt={line.name} ratio={0.8} sizes="88px" className={styles.photo} /> : <span className={styles.noPhoto} />}
               <div className={styles.info}>
                 <div className={styles.top}>
@@ -174,12 +174,12 @@ export const CartView = () => {
           {blocked ? (
             <>
               <p className={styles.problem}>{t('shop.cart.blocked')}</p>
-              <button type="button" className={clsx(shop.primaryBase, styles.checkout)} disabled>
+              <button type="button" className={cx(shop.primary, styles.checkout)} disabled>
                 {t('shop.cart.checkout')}
               </button>
             </>
           ) : (
-            <Link href="/checkout/" className={clsx(shop.primaryBase, styles.checkout)}>
+            <Link href="/checkout/" className={cx(shop.primary, styles.checkout)}>
               {t('shop.cart.checkout')}
             </Link>
           )}

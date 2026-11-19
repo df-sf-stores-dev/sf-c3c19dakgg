@@ -3,7 +3,7 @@ import { FilterPanel, ListingBar, MoreOnScroll } from './interactive/Filters'
 import { Retry } from './interactive/Retry'
 import { Notice } from './Notice'
 import { GridPlaceholder, ProductGrid } from './ProductCard'
-import { shop as styles } from './styles/shop'
+import styles from '../styles/shop.module.css'
 
 /** A collection's or a search's products: filters, sort, the grid and its states, and more loading on scroll. */
 export const ListingResults = ({ listing }: { listing: Listing }) => {
@@ -12,6 +12,7 @@ export const ListingResults = ({ listing }: { listing: Listing }) => {
     <div className={listing.facets.length || listing.priceBounds ? styles.listingFiltered : styles.listing}>
       <FilterPanel listing={listing} />
       <div className={styles.results}>
+        <h2 className={styles.hiddenHeading}>{t('shop.listing.heading')}</h2>
         {listing.status === 'ready' ? (
           <ListingBar listing={listing} />
         ) : null}
